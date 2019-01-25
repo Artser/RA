@@ -22,7 +22,6 @@ const Calendar = function({date}) {
         check = false;
       }
     }
-    console.log(resultMonth)
     return resultMonth;
   }
 
@@ -38,7 +37,6 @@ const Calendar = function({date}) {
       }
       startDate.setDate(startDate.getDate() + 1);
     }
-    console.log(resultWeek)
     return resultWeek;
   }
 
