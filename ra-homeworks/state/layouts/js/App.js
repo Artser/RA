@@ -4,15 +4,42 @@ const VIEW_LIST = "view_list";
 const VIEW_MODULE = "view_module";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      switch: VIEW_MODULE,
+      cardView: true
+    }
+  }
+
+  getSwitch() {
+    if (event.target.textContent === VIEW_LIST) {
+      return VIEW_MODULE;
+    } else {
+      return VIEW_LIST;
+    }
+  }
+
+  getCardView() {
+    return !(this.state.cardView);
+  }
+
+  setSwitch() {
+    this.setState({
+      switch: this.getSwitch(),
+      cardView: this.getCardView()
+    })
+  }
+
   render() {
     return (
       <div>
         <div className="toolbar">
           <IconSwitch
-            icon={VIEW_MODULE}
-            onSwitch={() => console.log("сменился тип вывода")} />
+            icon={this.state.switch}
+            onSwitch={() => this.setSwitch()} />
         </div>
-        {this.renderLayout(true)}
+        {this.renderLayout(this.state.cardView)}
       </div>
     );
   }
