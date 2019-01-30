@@ -34,10 +34,70 @@ class App extends React.Component {
 	render() {
 		const { data, colors, labels, series } = this.state;
 		const max = data.reduce((max, serie) => Math.max(max, serie.reduce((serieMax, item) => Math.max(serieMax, item), 0)), 0);
+		const allProps = Object.assign({}, this.state);
+
+		const ChooseCharts = props => {
+			if (props.horizontal) {
+				return "Charts horizontal";
+			} else {
+				return "Charts";
+			}
+		}
+
+		const Charts = props => {
+			return (
+				<div className={ChooseCharts}>
+					{props.children}
+				</div>
+			);
+		}
+
+		const ChartsSerie = props => {
+			const {className, height, serieIndex} = props;
+			return (
+				<div className={className} style={{height: height}} key={serieIndex}>
+					{props.children}
+				</div>
+			);
+		}
+
+		const ChartsItem = props => {
+			const {className, style, itemIndex} = props;
+			return (
+				<div className={className} style={style} key={itemIndex}>
+					{props.children}
+				</div>
+			);
+		}
+
+		const Legend = props => {
+			return (
+				<div className={props.className}>
+					{props.children}
+				</div>
+			);
+		}
+
+		const Label = props => {
+			const {type} = props;
+			return (
+				<label>{type}</label>
+			);
+		}
+
+		const LegendItem = props => {
+			const {colors, label, labelIndex} = props;
+			return (
+				<div>
+					<span className="Legend--color" style={{backgroundColor: colors[labelIndex % colors.length]}}/>
+          <span className="Legend--label">{label}</span>
+				</div>
+			)
+		}
 
 		return (
 			<section>
-        <div className="Charts">
+        <Charts>
           { data.map((serie, serieIndex) => {
             var sortedSerie = serie.slice(0),
               sum;
@@ -46,11 +106,13 @@ class App extends React.Component {
             sortedSerie.sort(compareNumbers);
 
             return (
-              <div className="Charts--serie"
-                key={ serieIndex }
-                style={{height: 250}}
+              <ChartsSerie
+								{...allProps}
+								className={"Charts--serie"}
+								height={250}
+                serieIndex={ serieIndex }
               >
-              <label>{ labels[serieIndex] }</label>
+              <Label type={labels[serieIndex]}></Label>
               { serie.map((item, itemIndex) => {
                 var color = colors[itemIndex], style,
                   size = item / (max) * 100;
@@ -63,21 +125,22 @@ class App extends React.Component {
                 };
 
               return (
-                <div
-                  className="Charts--item"
+                <ChartsItem
+									{...allProps}
+                  className={"Charts--item"}
                   style={ style }
-                  key={ itemIndex }
+                  itemIndex={ itemIndex }
                 >
                   <b style={{ color: color }}>{ item }</b>
-                 </div>
+                 </ChartsItem>
               );
               }) }
-              </div>
+              </ChartsSerie>
             );
           }) }
-        </div>
+        </Charts>
 
-        <div className="Charts">
+        <Charts>
   				{ data.map((serie, serieIndex) => {
   				 	var sortedSerie = serie.slice(0),
   				 		sum;
@@ -86,11 +149,13 @@ class App extends React.Component {
   				 	sortedSerie.sort(compareNumbers);
 
   					return (
-  						<div className="Charts--serie stacked"
-  				 			key={ serieIndex }
-  							style={{ height: 250 }}
+							<ChartsSerie
+								{...allProps} 
+								className={"Charts--serie stacked"}
+								height = {250}
+  				 			serieIndex={ serieIndex }
   						>
-  						<label>{ labels[serieIndex] }</label>
+  						<Label type={ labels[serieIndex] }></Label>
   						{ serie.map((item, itemIndex) => {
   							var color = colors[itemIndex], style,
   								size = item / sum * 100;
@@ -103,19 +168,20 @@ class App extends React.Component {
   							};
 
   						 return (
-  							 <div
-  							 	className="Charts--item stacked"
+  							 <ChartsItem
+								 	{...allProps}
+  							 	className={"Charts--item stacked"}
   							 	style={ style }
-  								key={ itemIndex }
+  								itemIndex={ itemIndex }
   							>
   							 	<b style={{ color: color }}>{ item }</b>
-  							 </div>
+  							 </ChartsItem>
   						);
   						}) }
-  						</div>
+  						</ChartsSerie>
   					);
   				}) }
-  			</div>
+  			</Charts>
 
         <div className="Charts">
   				{ data.map((serie, serieIndex) => {
@@ -126,11 +192,13 @@ class App extends React.Component {
   				 	sortedSerie.sort(compareNumbers);
 
   					return (
-  						<div className="Charts--serie layered"
-  				 			key={ serieIndex }
-  							style={{ height: 250 }}
+							<ChartsSerie
+								{...allProps} 
+								className={"Charts--serie layered"}
+								height={250}
+  				 			serieIndex={ serieIndex }
   						>
-  						<label>{ labels[serieIndex] }</label>
+  						<Label type={ labels[serieIndex] }></Label>
   						{ serie.map((item, itemIndex) => {
   							var color = colors[itemIndex], style,
   								size = item / (max) * 100;
@@ -144,16 +212,17 @@ class App extends React.Component {
   							};
 
   						 return (
-  							 <div
-  							 	className="Charts--item layered"
+  							 <ChartsItem
+								 	{...allProps}
+  							 	className={"Charts--item layered"}
   							 	style={ style }
-  								key={ itemIndex }
+  								itemIndex={ itemIndex }
   							>
   							 	<b style={{ color: color }}>{ item }</b>
-  							 </div>
+  							 </ChartsItem>
   						);
   						}) }
-  						</div>
+  						</ChartsSerie>
   					);
   				}) }
   			</div>
@@ -167,11 +236,13 @@ class App extends React.Component {
   				 	sortedSerie.sort(compareNumbers);
 
   					return (
-  						<div className="Charts--serie"
-  				 			key={ serieIndex }
-  							style={{ height: 'auto' }}
+							<ChartsSerie 
+								{...allProps}
+							  className={"Charts--serie"}
+								height={'auto'} 
+								serieIndex={ serieIndex }
   						>
-  						<label>{ series[serieIndex] }</label>
+  						<Label type={ series[serieIndex] }></Label>
   						{ serie.map((item, itemIndex) => {
   							var color = colors[itemIndex], style,
   								size = item / (max) * 100;
@@ -184,30 +255,33 @@ class App extends React.Component {
   							};
 
   						 return (
-  							 <div
-  							 	className="Charts--item"
+  							 <ChartsItem
+								 	{...allProps}
+  							 	className={"Charts--item"}
   							 	style={ style }
-  								key={ itemIndex }
+  								itemIndex={ itemIndex }
   							>
   							 	<b style={{ color: color }}>{ item }</b>
-  							 </div>
+  							 </ChartsItem>
   						);
   						}) }
-  						</div>
+  						</ChartsSerie>
   					);
   				}) }
   			</div>
 
-        <div className="Legend">
+        <Legend className={"Legend"}>
     			{ labels.map((label, labelIndex) => {
     				return (
-    				<div>
-    					<span className="Legend--color" style={{ backgroundColor: colors[labelIndex % colors.length]  }} />
-    					<span className="Legend--label">{ label }</span>
-    				</div>
+    				<LegendItem
+							{...allProps}
+							labelIndex={labelIndex}
+							label={label}
+						>
+    				</LegendItem>
     				);
     			}) }
-    		</div>
+    		</Legend>
 			</section>
 		);
 	}
