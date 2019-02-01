@@ -13,7 +13,7 @@ const Book = ({book, filterBooks}) => {
             <div className="book-title">{book.title}</div>
             {book.authors && 
                 <div className="book-authors">
-                    {book.authors.map(author => <button value={author} onClick={() => filterBooks(author)} className="book-author">{author}</button>)}
+                    {book.authors.map((author, index) => <button value={author} key={index} onClick={() => filterBooks(author)} className="book-author">{author}</button>)}
                 </div>
             }
         </div>
