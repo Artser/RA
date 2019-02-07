@@ -13,7 +13,7 @@ const navigation = [
   },
   {
     component: Fortune,
-    link: '/firtune',
+    link: '/fortune',
     title: 'Гадалка'
   }
 ];
