@@ -3,6 +3,20 @@ class SearchBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = { fixed: false };
+    this.scroll = this.scroll.bind(this);
+  }
+
+  scroll() {
+    this.setPosition();
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.scroll);
+    this.elementY = document.querySelector('input').getBoundingClientRect().top;
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.scroll);
   }
 
   render() {
@@ -10,10 +24,14 @@ class SearchBox extends React.Component {
   }
 
   isFixed() {
-    return undefined;
+    let result;
+    result = (this.elementY < window.pageYOffset);
+    return result;
   }
 
   setPosition() {
-    return undefined;
+    this.setState({
+      fixed: this.isFixed()
+    })
   }
 }
