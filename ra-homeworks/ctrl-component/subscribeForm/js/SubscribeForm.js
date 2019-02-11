@@ -3,19 +3,18 @@
 class SubscribeForm extends React.Component {
   constructor(props) {
     super(props);
-    this.error = 'is-error';
-    this.valid = 'is-valid';
     this.state = {
-      valid: ''
+      valid: null,
+      className: null
     };
   }
 
   isValid(input) {
     if (input.value !== '') {
       if (input.validity.valid) {
-        return this.valid;
+        return true;
       } else {
-        return this.error;
+        return false;
       }
     } else {
       return false;
@@ -24,16 +23,27 @@ class SubscribeForm extends React.Component {
 
   onChange() {
     this.setState({
-      valid: this.isValid(event.currentTarget)
+      valid: this.isValid(event.currentTarget.querySelector('input'))
     });
+    if (this.isValid(event.currentTarget.querySelector('input'))) {
+      this.setState({
+        className: 'is-valid'
+      });
+    } else {
+      this.setState({
+        className: 'is-error'
+      });
+    }
   }
 
   render() {
-    let changeHandler = this.onChange.bind(this);
+    let 
+      changeHandler = this.onChange.bind(this);
+
 
     return (
       <div className="subscribe__form">
-        <form className={`form form--subscribe ${this.state.valid}`}>
+        <form className={`form form--subscribe ${this.state.className}`}>
           <h4 className="form-title">Подписаться:</h4>
           <Subform
               onChange={changeHandler}
