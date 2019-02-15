@@ -22,7 +22,10 @@ const navigation = [
 const Menu = function() {
   return (
     <nav className="menu">
-      {navigation.map((obj, index) =><NavLink exact to={obj.link} activeClassName='menu__item-active' className='menu__item' key={index}>{obj.title}</NavLink>)}
+      <NavLink exact to={navigation[0].link} activeClassName='menu__item-active' className='menu__item'>{navigation[0].title}</NavLink>
+      <NavLink to={navigation[1].link} activeClassName='menu__item-active' className='menu__item'>{navigation[1].title}</NavLink>
+      <NavLink to={navigation[2].link} activeClassName='menu__item-active' className='menu__item'>{navigation[2].title}</NavLink>
+      <NavLink to={navigation[3].link} activeClassName='menu__item-active' className='menu__item'>{navigation[3].title}</NavLink>
     </nav>
   );
 }
